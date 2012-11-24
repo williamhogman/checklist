@@ -1,6 +1,9 @@
 *.class
 *.log
 
+# vagrant related
+.vagrant
+
 # sbt specific
 dist/*
 target/
