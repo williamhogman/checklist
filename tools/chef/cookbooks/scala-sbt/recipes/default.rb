@@ -14,16 +14,11 @@ if platform?("redhat", "centos", "scientific", "fedora", "arch", "suse")
     action :add
   end
 else
-  remote_file "#{Chef::Config[:file_cache_path]}/sbt_repo.deb" do
-    source node[:scala_sbt][:repo_url][:debian]
-    action :create_if_missing
-    backup false
-  end
-
-  package target_file do
-    provider Chef::Provider::Package::Dpkg
-    action :install
-    source target_file
+  apt_repository "typesafe" do
+    uri "http://apt.typesafe.com/"
+    distribution "unicorn"
+    components ["main"]
+    key "typesafe-repo-public.asc"
     notifies :run, "execute[apt-get update]", :immediately
   end
 end
