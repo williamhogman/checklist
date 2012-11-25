@@ -26,7 +26,7 @@ Vagrant::Config.run do |config|
   # some recipes and/or roles.
   #
   config.vm.provision :chef_solo do |chef|
-    chef.cookbooks_path = "tools/chef/cookbooks"
+    chef.cookbooks_path = ["tools/chef/cookbooks", "tools/chef/custom_cookbooks"]
 
     chef.add_recipe "mongodb::default"
     chef.add_recipe "nginx::default"
