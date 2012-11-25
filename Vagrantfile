@@ -31,6 +31,7 @@ Vagrant::Config.run do |config|
     chef.add_recipe "mongodb::default"
     chef.add_recipe "nginx::default"
     chef.add_recipe "java::default"
+    chef.add_recipe "scala-sbt::default"
     # You may also specify custom JSON attributes:
     chef.json = { }
   end
