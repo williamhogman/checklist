@@ -58,7 +58,7 @@
 			CodeGeneration
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Sat Dec 15 23:15:13 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Sat Dec 15 23:17:41 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -897,9 +897,9 @@
       strokecolor="black"
     />
     <text name="Fig7.1"
-      x="40"
+      x="44"
       y="431"
-      width="104"
+      width="96"
       height="23"
       fill="0"
       fillcolor="white"
@@ -1248,7 +1248,7 @@
     <rectangle name="Fig12.0"
       x="32"
       y="480"
-      width="70"
+      width="174"
       height="78"
       fill="0"
       fillcolor="white"
@@ -1272,7 +1272,7 @@
       justification="Center"
     >Organization administrator</text>
     <ellipse name="Fig12.2"
-      x="67"
+      x="119"
       y="497"
       rx="8"
       ry="7"
@@ -1288,9 +1288,9 @@
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="67"
+      <moveto x="119"
               y="505" />
-      <lineto x="67"
+      <lineto x="119"
               y="520" />
     </path>
     <path name="Fig12.4"
@@ -1300,9 +1300,9 @@
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="57"
+      <moveto x="109"
               y="510" />
-      <lineto x="77"
+      <lineto x="129"
               y="510" />
     </path>
     <path name="Fig12.5"
@@ -1312,9 +1312,9 @@
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="67"
+      <moveto x="119"
               y="520" />
-      <lineto x="62"
+      <lineto x="114"
               y="535" />
     </path>
     <path name="Fig12.6"
@@ -1324,13 +1324,13 @@
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="67"
+      <moveto x="119"
               y="520" />
-      <lineto x="72"
+      <lineto x="124"
               y="535" />
     </path>
     <group name="Fig12.7"
-         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[67, 558, 0, 0]"
+         description="org.argouml.uml.diagram.ui.FigStereotypesGroup[119, 558, 0, 0]"
          href="10-0-1-102--5556be1e:13b9f0f7492:-8000:0000000000000889"
          fill="0"
          fillcolor="white"
@@ -1341,7 +1341,7 @@
       </private>
       
       <rectangle name="Fig12.7.0"
-        x="67"
+        x="119"
         y="558"
         width="0"
         height="0"
@@ -1499,10 +1499,10 @@
       stroke="1"
       strokecolor="black"
     >
-      <moveto x="77"
+      <moveto x="129"
               y="510" />
       <lineto x="248"
-              y="514" />
+              y="513" />
     </path>
   </group>
   <group name="Fig15"
