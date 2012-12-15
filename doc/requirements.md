@@ -25,8 +25,8 @@ We have identified a number of important stakeholders.
 
 ### Management
 
-Mangement want to ensure that their business processes are applied
-consistently. Mangagement also wants accountability, answering the
+Management want to ensure that their business processes are applied
+consistently. Management also wants accountability, answering the
 question who signed-off on what.
 
 ### Process developers
@@ -82,15 +82,15 @@ daemon and relevant client libraries are to be included.
 
 ### Nginx
 
-The nginx webserver is to be used as proxy for both performance and
+The nginx web server is to be used as proxy for both performance and
 security reasons.
 
 ### Anticipated Workplace environment
 
 The users may not be tied to a traditional PC but may instead use a
-smaller screen device such as a laptop, tablet or smartphone.
+smaller screen device such as a laptop, tablet or smart-phone.
 
-Client applications may lose connectivity with the backend, at any
+Client applications may lose connectivity with the back-end, at any
 time.
 
 The application is to be used in small organizations with a people
@@ -140,7 +140,7 @@ resumed. The user then proceeds from steep 3.
 
 UC-2 Sign-off checklist
 ------------------------
-After completeting a checklist a checklist user may be required to
+After completing a checklist a checklist user may be required to
 Sign-off on it. 
 
 1. The user selects a completed but not-yet signed-off checklist.
@@ -162,7 +162,7 @@ Create
 2. The administrator enters the properties for the user
 3. The system stores the new user.
 
-Retrive
+Retrieve
 1. The administrator requests a listing of organization users
 2. The administrator selects a user
 3. The system displays information about the user.
@@ -214,7 +214,7 @@ Create
 6. The user marks the checklist template as ready for use.
 7. The system makes the template available to template users.
 
-Retrive
+Retrieve
 1. The user requests a listing of checklist templates
 2. The user selects a checklist template.
 3. The system displays information about the checklist template.
