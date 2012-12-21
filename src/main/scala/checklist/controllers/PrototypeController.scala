@@ -17,11 +17,12 @@ class PrototypeController extends Controller {
   get("/users/:username/prototypes") { request =>
     val username = request.routeParams("username")
 
-    var user = new MongoDBObject(
-      db("users").findOne(DBObject("name" -> username)).get)
-    var prototypes = user.as[MongoDBList]("prototypes")
+    //var user = new MongoDBObject(
+    // db("users").findOne(DBObject("name" -> username)).get)
 
-    render.json(prototypes).toFuture
+    //var prototypes = user.as[MongoDBList]("prototypes")
+    val templates = Templates.getUserTemplates(username).get
+    render.json(templates).toFuture
   }
 
   post("/users/:username/prototypes") { request =>
