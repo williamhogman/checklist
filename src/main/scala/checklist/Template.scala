@@ -67,9 +67,9 @@ object Templates {
   }
 
   def getUserTemplates(username: String) = {
-    val fields = MongoDBObject("prototypes" -> 1, "_id" -> 0)
+    val fields = MongoDBObject("templates" -> 1, "_id" -> 0)
     db("users").findOne(MongoDBObject("username" -> username), fields) map {
-      _.as[MongoDBList]("prototypes") map {_.toString()}
+      _.getAsOrElse[Seq[ObjectId]]("templates", Seq[ObjectId]()) map (_.toString)
     }
   }
 
