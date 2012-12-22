@@ -6,6 +6,8 @@ import checklist.Database.db
 import com.twitter.finatra.Controller
 import com.twitter.util.Future
 
+import com.codahale.jerkson.Json
+
 import com.mongodb.util.JSON
 import com.mongodb.{BasicDBObject, BasicDBList}
 import com.mongodb.casbah.Imports.{DBObject, DBList}
@@ -16,11 +18,6 @@ import java.nio.charset.Charset
 class PrototypeController extends Controller {
   get("/users/:username/prototypes") { request =>
     val username = request.routeParams("username")
-
-    //var user = new MongoDBObject(
-    // db("users").findOne(DBObject("name" -> username)).get)
-
-    //var prototypes = user.as[MongoDBList]("prototypes")
     val templates = Templates.getUserTemplates(username).get
     render.json(templates).toFuture
   }
@@ -37,18 +34,28 @@ class PrototypeController extends Controller {
     render.plain("Success").toFuture
   }
 
-  get("/users/:username/prototypes/:protoId") { request =>
+  get("/users/:username/prototypes/:templateid") { 
+    request =>
     val username = request.routeParams("username")
-    val protoId = request.routeParams("protoId").toInt
-
-    var user = new MongoDBObject(
-      db("users").findOne(DBObject("name" -> username)).get)
-    var prototypes = user.as[MongoDBList]("prototypes")
-
-    render.json(prototypes(protoId)).toFuture
+    val template = request.routeParams("templateid")
+    Templates.byId(template) match {
+      case Some(value) => render.json(value).toFuture
+      case None => render.plain("not found").toFuture
+    }
   }
 
-  post("/users/:username/prototypes/:protoId") { request =>
+  post("/users/:username/prototypes/:id") {
+    request =>
+    val username = request.routeParams("username")
+    val id = request.routeParams("id")
+
+    val item = request.withReader(Json.parse[TemplateItem])
+
+    val x = Templates.addItem(id, item)
+    render.json(item).toFuture
+  }
+
+  post("/users/:username/foo/:protoId") { request =>
     val username = request.routeParams("username")
     val protoId = request.routeParams("protoId").toInt
     val prototypeItem = JSON.parse(
