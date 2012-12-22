@@ -1,6 +1,7 @@
 package checklist
 
 import com.mongodb.casbah.Implicits._
+import org.bson.types.ObjectId
 //import com.mongodb.casbah.Imports._
 import com.mongodb.casbah.commons.{MongoDBObject,MongoDBList}
 import com.fasterxml.jackson.annotation.JsonProperty
@@ -33,6 +34,20 @@ object Users {
 
   def byUsername(username: String): Option[User] = {
     db("users").findOne(MongoDBObject("username" -> username)).map(wrapDBObj).map(MongoObjToUser)
+  }
+
+  def addTemplate(username: String, id: ObjectId) = {
+    val col = db("users")
+    val query = MongoDBList("username" -> username) 
+    val upd = MongoDBList("$addToSet" -> MongoDBObject("templates" -> id))
+    col.update(query, upd)
+  }
+
+  def removeTemplate(username: String, id: ObjectId) = {
+    val col = db("username")
+    val query = MongoDBList("username" -> username)
+    val upd = MongoDBList("$pull" -> MongoDBList("templates" -> id))
+    col.update(query, upd)
   }
 }
 
