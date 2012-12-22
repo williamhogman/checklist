@@ -53,9 +53,10 @@ class PrototypeController extends Controller {
 
     val item = request.withReader(Json.parse[TemplateItem])
 
-    val x = Templates.addItem(id, item)
-    println(x)
-    render.json(item).toFuture
+    Templates.addItem(id, item) match {
+      case Some(x) => render.json(item).toFuture
+      case None => render.notFound.plain("not found").toFuture
+    }
   }
 
   delete("/users/:username/prototypes/:id") {
@@ -63,8 +64,10 @@ class PrototypeController extends Controller {
     val username = request.routeParams("username")
     val id = request.routeParams("id")
 
-    Templates.delete(id)
-    render.status(204).toFuture
+    Templates.delete(id) match {
+      case Some(x) => render.plain("deleted").toFuture
+      case None => render.notFound.plain("template not found").toFuture
+    }
   }
 
   delete("/users/:username/prototypes/:templateid/:itemid") {
@@ -74,6 +77,6 @@ class PrototypeController extends Controller {
     val itemid = request.routeParams("itemid").toInt
 
     Templates.deleteItem(template, itemid)
-    render.status(204).toFuture
+    render.plain("deleted").status(204).toFuture
   }
 }
