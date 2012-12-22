@@ -1,6 +1,7 @@
 package checklist
 
 import com.mongodb.casbah.Implicits._
+//import com.mongodb.casbah.Imports._
 import com.mongodb.casbah.commons.{MongoDBObject,MongoDBList}
 import com.fasterxml.jackson.annotation.JsonProperty
 
@@ -19,6 +20,9 @@ class User(
     isAdmin = obj.as[Boolean]("isAdmin"),
     isProcDev = obj.as[Boolean]("isProcDev")
   )
+
+  def getUsername = username
+  def getRealname = realname
 
 }
 
