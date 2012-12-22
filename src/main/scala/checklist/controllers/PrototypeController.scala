@@ -18,8 +18,10 @@ import java.nio.charset.Charset
 class PrototypeController extends Controller {
   get("/users/:username/prototypes") { request =>
     val username = request.routeParams("username")
-    val templates = Templates.getUserTemplates(username).get
-    render.json(templates).toFuture
+    Templates.getUserTemplates(username) match {
+      case Some(template) => render.json(template).toFuture
+      case None => render.notFound.plain("user not found").toFuture
+    } 
   }
 
   post("/users/:username/prototypes") { request =>
@@ -34,11 +36,11 @@ class PrototypeController extends Controller {
     render.plain("Success").toFuture
   }
 
-  get("/users/:username/prototypes/:templateid") { 
+  get("/users/:username/prototypes/:id") { 
     request =>
     val username = request.routeParams("username")
-    val template = request.routeParams("templateid")
-    Templates.byId(template) match {
+    val id = request.routeParams("id")
+    Templates.byId(id) match {
       case Some(value) => render.json(value).toFuture
       case None => render.plain("not found").toFuture
     }
@@ -52,65 +54,26 @@ class PrototypeController extends Controller {
     val item = request.withReader(Json.parse[TemplateItem])
 
     val x = Templates.addItem(id, item)
+    println(x)
     render.json(item).toFuture
   }
 
-  post("/users/:username/foo/:protoId") { request =>
+  delete("/users/:username/prototypes/:id") {
+    request =>
     val username = request.routeParams("username")
-    val protoId = request.routeParams("protoId").toInt
-    val prototypeItem = JSON.parse(
-      request.content.toString(Charset.forName("UTF-8")))
+    val id = request.routeParams("id")
 
-    val prototypeItemsKey = "prototypes." + protoId + ".items"
-
-    db("users").update(
-      DBObject("name" -> username),
-      DBObject("$push" -> DBObject(prototypeItemsKey -> prototypeItem)))
-
-    render.plain("Success").toFuture
+    Templates.delete(id)
+    render.status(204).toFuture
   }
 
-  /*put("/users/:username/prototypes/:protoId") { request =>
+  delete("/users/:username/prototypes/:templateid/:itemid") {
+    request =>
     val username = request.routeParams("username")
-    val protoId = request.routeParams("protoId").toInt
-    val updateQuery = JSON.parse(
-      request.content.toString(Charset.forName("UTF-8"))).asInstanceOf[BasicDBObject]
+    val template = request.routeParams("templateid")
+    val itemid = request.routeParams("itemid").toInt
 
-    db("users").update(DBObject("name" -> username), updateQuery)
-
-    render.plain("Success").toFuture
-  }*/
-
-  delete("/users/:username/prototypes/:protoId") { request =>
-    val username = request.routeParams("username")
-    val protoId = request.routeParams("protoId").toInt
-
-    db("users").update(
-      DBObject("name" -> username),
-      DBObject("$unset" -> DBObject(
-        "prototypes." + protoId -> 1)))
-    db("users").update(
-      DBObject("name" -> username),
-      DBObject("$pull" -> DBObject("prototypes" -> null)))
-
-    render.plain("Success").toFuture
-  }
-
-  delete("/users/:username/prototypes/:protoId/:itemId") { request =>
-    val username = request.routeParams("username")
-    val protoId = request.routeParams("protoId").toInt
-    val itemId = request.routeParams("itemId").toInt
-
-    val prototypeItemsKey = "prototypes." + protoId + ".items"
-
-    db("users").update(
-      DBObject("name" -> username),
-      DBObject("$unset" -> DBObject(
-        prototypeItemsKey + "." + itemId -> 1)))
-    db("users").update(
-      DBObject("name" -> username),
-      DBObject("$pull" -> DBObject(prototypeItemsKey -> null)))
-
-    render.plain("Success").toFuture
+    Templates.deleteItem(template, itemid)
+    render.status(204).toFuture
   }
 }

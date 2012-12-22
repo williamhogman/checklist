@@ -19,6 +19,10 @@ class TemplateItem(
 
   def getTitle = title
 
+  def toMongoObject = MongoDBObject(
+    "title" -> title
+  )
+
 }
 
 class Template(
@@ -29,8 +33,18 @@ class Template(
   def this(obj: MongoDBObject) = this(
     requireSignoff = obj.as[Boolean]("requireSignoff"),
     description = obj.as[String]("description"),
-    items = obj.as[MongoDBList]("items").map(_.asInstanceOf[MongoDBObject]).map(new TemplateItem(_))
+    items = obj.as[MongoDBList]("items").map(_.asInstanceOf[DBObject]).map(new TemplateItem(_))
   )
+
+  def toMongoObject = MongoDBObject(
+    "requireSignoff" -> requireSignoff,
+    "description" -> description,
+    "items" -> items.map(_.toMongoObject)
+  )
+
+  def getItems = items
+  def getDescription = description
+  def getRequireSignoff = requireSignoff
 }
 
 object Templates {
@@ -40,10 +54,16 @@ object Templates {
     if (ObjectId.isValid(id)) Some(new ObjectId(id))
     else None
 
+  private def objectIdQuery(id: ObjectId): MongoDBObject =
+    MongoDBObject("_id" -> id)
+
+  private def objectIdQuery(id: String): Option[MongoDBObject] =
+    makeObjectId(id).map(objectIdQuery(_))
+    
+
   def byId(id: String): Option[Template] = {
     val col = db("templates")
-    val query = makeObjectId(id) map { x => MongoDBObject("_id" -> x) }
-    query map(col.findOne(_)) flatMap {x => x.map(new Template(_))}
+    objectIdQuery(id) map(col.findOne(_)) flatMap {x => x map(new Template(_))}
   }
 
   def getUserTemplates(username: String) = {
@@ -55,8 +75,19 @@ object Templates {
 
   def addItem(id: String, item: TemplateItem) = {
     val col = db("templates")
-    val upd = MongoDBObject("$push" -> ("items" -> item))
-    makeObjectId(id) map { x=> col.update(MongoDBObject("_id" -> x), upd) }
+    val upd = MongoDBObject("$push" -> MongoDBObject("items" -> item.toMongoObject))
+    objectIdQuery(id) map(col.update(_, upd))
   }
 
+  def delete(id: String) = {
+    val col = db("templates")
+    objectIdQuery(id) map(col.remove(_))
+  }
+
+
+  def deleteItem(id: String, itemid: Int) = {
+    val col = db("templates")
+    val upd = MongoDBObject("$pull" -> MongoDBObject("items" -> MongoDBObject("id" -> itemid)))
+    objectIdQuery(id) map(col.update(_, upd))
+  }
 }
