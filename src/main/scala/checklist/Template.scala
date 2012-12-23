@@ -47,8 +47,16 @@ class Template(
   def getRequireSignoff = requireSignoff
 }
 
-object Templates {
+object Template {
   private val db = checklist.Database.db
+
+  implicit object TemplateIsIdFindable extends IdFindable[Template] {
+    def byId(id: ObjectId) = {
+      val query = MongoDBObject("_id" -> id)
+      val db = checklist.Database.db
+      db("templates").findOne(query) map(new Template(_))
+    }
+  }
 
   private def makeObjectId(id: String): Option[ObjectId] =
     if (ObjectId.isValid(id)) Some(new ObjectId(id))
@@ -61,10 +69,7 @@ object Templates {
     makeObjectId(id).map(objectIdQuery(_))
     
 
-  def byId(id: String): Option[Template] = {
-    val col = db("templates")
-    objectIdQuery(id) map(col.findOne(_)) flatMap {x => x map(new Template(_))}
-  }
+  def byId(id: String) = DBClient.byId[Template](id)
 
   def getUserTemplates(username: String) = {
     val fields = MongoDBObject("templates" -> 1, "_id" -> 0)

@@ -18,7 +18,7 @@ import java.nio.charset.Charset
 class PrototypeController extends Controller {
   get("/users/:username/prototypes") { request =>
     val username = request.routeParams("username")
-    Templates.getUserTemplates(username) match {
+    Template.getUserTemplates(username) match {
       case Some(template) => render.json(template).toFuture
       case None => render.notFound.plain("user not found").toFuture
     } 
@@ -40,7 +40,7 @@ class PrototypeController extends Controller {
     request =>
     val username = request.routeParams("username")
     val id = request.routeParams("id")
-    Templates.byId(id) match {
+    Template.byId(id) match {
       case Some(value) => render.json(value).toFuture
       case None => render.plain("not found").toFuture
     }
@@ -53,7 +53,7 @@ class PrototypeController extends Controller {
 
     val item = request.withReader(Json.parse[TemplateItem])
 
-    Templates.addItem(id, item) match {
+    Template.addItem(id, item) match {
       case Some(x) => render.json(item).toFuture
       case None => render.notFound.plain("not found").toFuture
     }
@@ -64,7 +64,7 @@ class PrototypeController extends Controller {
     val username = request.routeParams("username")
     val id = request.routeParams("id")
 
-    Templates.delete(id) match {
+    Template.delete(id) match {
       case Some(x) => render.plain("deleted").toFuture
       case None => render.notFound.plain("template not found").toFuture
     }
@@ -76,7 +76,7 @@ class PrototypeController extends Controller {
     val template = request.routeParams("templateid")
     val itemid = request.routeParams("itemid").toInt
 
-    Templates.deleteItem(template, itemid)
+    Template.deleteItem(template, itemid)
     render.plain("deleted").status(204).toFuture
   }
 }
