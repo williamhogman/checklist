@@ -1,9 +1,7 @@
 package checklist
 
-import com.mongodb.casbah.Implicits._
 import org.bson.types.ObjectId
-//import com.mongodb.casbah.Imports._
-import com.mongodb.casbah.commons.{MongoDBObject,MongoDBList}
+import com.mongodb.casbah.Imports._
 import com.fasterxml.jackson.annotation.JsonProperty
 
 // TODO: Get the user json thingy to work.
@@ -27,27 +25,33 @@ class User(
 
 }
 
-object Users {
+object User extends MongoColMixin {
   private val db = checklist.Database.db
 
+  protected def mdbcol = db("users")
+
   implicit def MongoObjToUser(o: MongoDBObject): User = new User(o)
+  implicit def MongoObjToUser(o: Option[MongoDBObject]) : Option[User] = o map(MongoObjToUser(_))
 
-  def byUsername(username: String): Option[User] = {
-    db("users").findOne(MongoDBObject("username" -> username)).map(wrapDBObj).map(MongoObjToUser)
+  implicit object UserIsIdFindable extends IdFindable[User] {
+    def byId(id: ObjectId) = findOneById(id) map(new User(_))
   }
+  
+  private def usernameQuery(username: String) : MongoDBObject =
+    MongoDBObject("username" -> username)
 
-  def addTemplate(username: String, id: ObjectId) = {
-    val col = db("users")
-    val query = MongoDBList("username" -> username) 
-    val upd = MongoDBList("$addToSet" -> MongoDBObject("templates" -> id))
-    col.update(query, upd)
-  }
+  def byUsername(username: String): Option[User] =
+    findOne(usernameQuery(username))
 
-  def removeTemplate(username: String, id: ObjectId) = {
-    val col = db("username")
-    val query = MongoDBList("username" -> username)
-    val upd = MongoDBList("$pull" -> MongoDBList("templates" -> id))
-    col.update(query, upd)
-  }
+  def addTemplate(username: String, id: ObjectId) = update(
+    usernameQuery(username),
+    MongoDBObject("$addToSet" -> MongoDBObject("templates" -> id))
+  )
+
+  def removeTemplate(username: String, id: ObjectId) = update(
+    usernameQuery(username),
+    MongoDBObject("$pull" -> MongoDBObject("templates" -> id))
+  )
+    
+
 }
-

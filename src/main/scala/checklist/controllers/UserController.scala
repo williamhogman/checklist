@@ -14,7 +14,7 @@ class UserController extends Controller {
 
   get("/users/:username") { request =>
     val username = request.routeParams("username")
-    render.json(Users.byUsername(username)).toFuture
+    render.json(User.byUsername(username)).toFuture
   }
 
   put("/users/:username") { request =>
