@@ -22,9 +22,11 @@ class DBRef[T: IdFindable](val id: ObjectId) extends DBRefable[T] {
   }
 }
 
-
 trait MongoColMixin {
   protected def mdbcol : MongoCollection
+
+  protected def find(query: MongoDBObject): Iterator[MongoDBObject] =
+    mdbcol.find(query) map(wrapDBObj)
 
   protected def findOne(query: MongoDBObject) : Option[MongoDBObject] =
     mdbcol.findOne(query) map(wrapDBObj)
@@ -32,7 +34,7 @@ trait MongoColMixin {
   protected def findOneById(id: ObjectId) =
     mdbcol.findOneByID(id)
 
-  protected def update(query: MongoDBObject, to: MongoDBObject) = 
+  protected def update(query: MongoDBObject, to: MongoDBObject) =
     mdbcol.update(query, to)
 
 }
