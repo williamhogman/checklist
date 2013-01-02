@@ -18,3 +18,12 @@ project/plugins/project/
 .*.swp
 .*.un~
 .DS_Store
+
+# Python
+*.py[cod]
+
+# Virtualenvs, which I usually store in folders named .venv
+.venv
+
+# doit files
+.doit.db
